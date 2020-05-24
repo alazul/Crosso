@@ -1,0 +1,41 @@
+@import "contactbar";
+
+#main-section {
+    grid-area: main-section;
+
+    height: 100vh;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content 1fr max-content;
+
+    background-color: #f8f9fa;
+
+    #chat-bubble-container {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        min-height: 0px;
+        max-height: 80vh;
+        padding: 50px;
+
+
+        .chat-bubble-interlocutor {
+            @include chat-bubble(white,black,black);
+        }
+
+        .chat-bubble-user {
+            @include chat-bubble($secondary-color,white,black);
+            align-self: flex-end;
+        }
+    }
+    #send-message-section {
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-columns: 1fr max-content;
+        column-gap: 10px;
+
+        padding: 10px;
+    }
+}

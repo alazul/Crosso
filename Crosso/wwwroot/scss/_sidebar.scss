@@ -1,0 +1,119 @@
+#sidebar {
+    grid-area: sidebar;
+
+    display: grid;
+    grid-template-rows: 80px max-content max-content;
+
+    grid-template-areas:
+        "navbar"
+        "search-container"
+        "contact-list-container";
+
+    border-right: #e0e0e0 solid 1px;
+
+    #navbar {
+        grid-area: navbar;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 1fr;
+        align-items: center;
+
+        background-color: #ededed;
+
+        padding: 10px;
+
+        #navbar-profile-photo {
+            width: 50px;
+            height: 50px;
+        }
+
+        #navbar-right {
+            justify-self: right;
+
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: max-content;
+            column-gap: 20px;
+
+            #start-new-chat-button {
+            }
+            #options-button {
+            }
+        }
+    }
+    #search-container {
+        grid-area: search-container;
+        justify-self: center;
+
+        display: grid;
+        grid-auto-flow: column;
+        align-items: center;
+        column-gap: 15px;
+
+        width: fit-content;
+    }
+    #contact-list-container {
+        grid-area: contact-list-container;
+
+        display: grid;
+        grid-auto-flow: row;
+        align-items: center;
+
+        height: fit-content;
+
+        border-top: #f2f2f2 solid 1px;
+
+        .contact-card {
+            cursor: pointer;
+            user-select: none;
+
+            display: grid;
+            grid-template-columns: max-content 1fr max-content;
+            align-items: center;
+            column-gap: 15px;
+
+            height: fit-content;
+
+            padding: 10px;
+
+            background: white;
+            border-bottom: #f2f2f2 solid 1px;
+
+            &:hover{
+                background-color: #f5f5f5;
+            }
+
+            .contact-photo {
+                width: 50px;
+                height: 50px;
+            }
+
+            .contact-name-and-recent-message {
+                justify-self: left;
+
+                display: grid;
+                grid-auto-flow: row;
+                grid-auto-columns: max-content;
+                align-items: center;
+
+                row-gap: 10px;
+
+                .contact-name{
+                    font-weight: bold;
+                }
+                .recent-message-of-contact{
+                    font-size: small;
+                    color: #666666;
+                }
+            }
+            .recent-message-date-and-chat-options{
+                display: grid;
+                grid-auto-flow: row;
+                grid-auto-columns: max-content;
+                align-items: center;
+
+                row-gap: 10px;
+            }
+        }
+    }
+}

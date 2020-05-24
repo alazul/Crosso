@@ -1,0 +1,30 @@
+@import "public";
+
+@import "sidebar";
+@import "main-section";
+@import "login-page";
+
+* {
+    font-family: $defaultFont;
+    line-height: normal;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+#main-container {
+    height: 100vh;
+
+    display: grid;
+
+    grid-template-columns: 3fr 9fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "sidebar   main-section";  
+}

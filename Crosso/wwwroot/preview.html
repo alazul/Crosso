@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang='en'><head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crosso</title>
+    <base href="/~/" />
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" />
+    <link href="/css/site.css" rel="stylesheet" />
+    <link href="/css/main.css" rel="stylesheet" />
+</head><body><app>
+        <div id="main-container">
+<div id="sidebar">
+    <NavMenu></NavMenu>
+</div>
+
+
+    <div id="main-section">
+        <h1>Crosso</h1>
+
+Welcome to yours new app.
+
+<SurveyPrompt Title="How is Blazor working for you?"></SurveyPrompt>
+    </div>
+
+</div>
+    </app>
+            <script>
+                // Create WebSocket connection.
+                var scheme = 'wss';
+                var port = document.location.port ? (':' + document.location.port) : '';
+                var url = scheme + '://' + document.location.hostname + port + '/ws';
+                var socket = new WebSocket(url);
+
+                // Connection opened
+                //socket.addEventListener('open', function(event) {
+                //    socket.send('Hello Server!');
+                //});
+
+                // Listen for messages
+                socket.addEventListener('message', function(event) {
+                    console.log('Message from server ', event.data);
+                    document.body.innerHTML = event.data;
+                });
+            </script></body></html>

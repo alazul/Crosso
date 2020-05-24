@@ -1,0 +1,109 @@
+﻿@inherits LayoutComponentBase
+@inject DBManager DBManager
+@inject CrossoManager CrossoManager
+@inject NavigationManager NavigationManager
+
+
+<div id="main-container">
+    @if (IsUserLoggedIn)
+    {
+        <div id="sidebar">
+            <Sidebar/>
+        </div>   
+
+        <div id="main-section">
+            @Body
+        </div> 
+    }
+    else if(!RegisterMode)
+    {
+        <div class="auth-page-container">
+            <div class="login-form-container">
+                <span class="form-header">LOGIN</span>
+                <div class="input-field">
+                    <label for="user-name-textbox">User Name</label>
+                    <input @bind="UserName" id="user-name-textbox" type="text" class="validate">
+                </div>
+                <div class="input-field">
+                    <label for="password-textbox">Password</label>
+                    <input @bind="Password" id="password-textbox" type="password" class="validate">
+                </div>
+                <div class="button-container">
+                    <button @onclick="EnableRegisterMode" type="submit"  class="waves-effect waves-light btn red">
+                        Signup
+                        <i class="fas fa-user-plus"></i>
+                    </button>
+                    <button @onclick="Login" type="submit" style="justify-self: right;"  class="waves-effect waves-light btn">
+                        Login
+                        <i class="fas fa-sign-in-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+    else{
+         <div class="auth-page-container">
+            <div class="register-form-container">
+                <span class="form-header">Register</span>
+                <div class="input-field">
+                    <label for="user-name-textbox">User Name</label>
+                    <input @bind="UserName" placeholder="Enter A User Name" id="user-name-textbox" type="text" class="validate">
+                </div>
+                <div class="input-field">
+                    <label for="password-textbox">Password</label>
+                    <input @bind="Password" placeholder="Enter A Wise Password" id="password-textbox" type="password" class="validate">
+                </div>
+                <div class="button-container">
+                    <button @onclick="Register" type="submit" style="justify-self: center;" class="waves-effect waves-light btn red">
+                        Register
+                        <i class="fas fa-user-plus"></i>
+                    </button>                    
+                </div>
+            </div>
+        </div>
+    }
+    
+</div>
+
+
+@code {
+    public bool IsUserLoggedIn { get; set; }
+    public bool RegisterMode { get; set; }
+
+    public string UserName { get; set; }
+    public string Password { get; set; }
+
+    private void Login()
+    {
+        var result = CrossoManager.Login(UserName, Password);
+
+        if (result)
+        {
+            IsUserLoggedIn = true;
+            NavigationManager.NavigateTo("/home");
+        }
+        else
+        {
+            //! login error
+        }
+    }
+
+    private void EnableRegisterMode()
+    {
+        RegisterMode = true;
+    }
+
+    private void Register()
+    {
+        var result = CrossoManager.Register(UserName, Password);
+
+        if (result)
+        {
+            RegisterMode = false;
+        }
+        else
+        {
+            //! register error
+        }
+    }
+}

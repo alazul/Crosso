@@ -1,0 +1,15 @@
+{
+    "liveSassCompile.settings.formats": [
+        {
+            "format": "expanded",
+            "extensionName": ".css",
+            "savePath": "./Crosso/wwwroot/css"
+        },
+        /*{
+            "extensionName": ".min.css",
+            "format": "compressed",
+            "savePath": "./styles/css"
+        }*/
+    ],
+    "liveSassCompile.settings.generateMap": true,
+}

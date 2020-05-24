@@ -1,0 +1,71 @@
+@page "/contact/{ContactID}/chat"
+
+@inject CrossoManager CrossoManager;
+@inject IJSRuntime JSRuntime;
+
+<div id="contactbar">
+    <Contactbar ContactName="@CurrentContact.Name"/>
+</div>
+<div id="chat-bubble-container">
+    @foreach (var chatBubble in ChatOfCurrentContact?.ChatBubbles)
+    {
+        <div class="@((chatBubble.OwnerUserID == CrossoManager.CurrentUser.UserID ? "chat-bubble-user" : "chat-bubble-interlocutor"))">
+            <span>
+                @chatBubble?.MessageBody
+            </span>
+            <div>
+                <span>
+                    @chatBubble?.MessageDate.ToShortTimeString()
+                </span>
+            </div>
+        </div>
+    }
+</div>
+<div id="send-message-section">
+    <input @bind="Message" placeholder="Bir Mesaj Yazın" type="text" id="message-body-textbox">
+    <button id="send-message-button" @onclick="SendMessage" class="waves-effect waves-light btn-floating">
+        <i class="fas fa-paper-plane"></i>
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public string ContactID { get; set; }
+
+    public Contact CurrentContact { get; set; }
+
+    public Chat ChatOfCurrentContact { get; set; }
+
+    public string Message { get; set; }
+
+    protected override void OnInitialized()
+    {
+        CrossoManager.ChatChanged += () =>
+        {
+            UpdateChatOfContact();
+            InvokeAsync(StateHasChanged);
+        };
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        JSRuntime.InvokeVoidAsync("scrollScrollbarToBottom", "chat-bubble-container");
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        CurrentContact = CrossoManager.CurrentUser.Contacts.Where(c => c.ContactID == new ObjectId(ContactID)).SingleOrDefault();
+
+        UpdateChatOfContact();
+    }
+
+    private void UpdateChatOfContact()
+    {
+        ChatOfCurrentContact = CrossoManager.GetChatOfContact(CurrentContact.ChatID); //TODO: do this async 
+    }
+
+    async void SendMessage()
+    {
+        ChatOfCurrentContact = CrossoManager.SendMessage(ChatOfCurrentContact.ChatID, Message);
+    }
+}

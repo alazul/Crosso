@@ -1,0 +1,117 @@
+﻿@inject NavigationManager NavigationManager
+@inject CrossoManager CrossoManager
+@inject IJSRuntime JSRuntime;
+
+<div id="navbar">
+    <img src="assets/images/profile.jpg" alt="" class="circle responsive-img" id="navbar-profile-photo">
+    <span>@CrossoManager.CurrentUser?.UserName</span>
+    <div id="navbar-right">
+        <div>
+            <!-- Modal Trigger -->
+            <a class="waves-effect waves-light btn-floating modal-trigger" href="#add-contact-modal">
+                 <i class="fas fa-comments"></i>
+            </a>
+
+            <!-- Modal Structure -->
+            <div  id="add-contact-modal" class="modal">
+              <div class="modal-content">
+                <h4>ADD FRIEND</h4>
+                <p>You can add a friend with thair CrossoTag</p>
+                 <div class="input-field">
+                    <label for="user-name-textbox">CrossoTag</label>
+                    <input @bind="TargetUserName" id="user-name-textbox" type="text" class="validate">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <a @onclick="AddContact" href="#!" class="modal-close waves-effect waves-light btn-floating red">
+                    <i class="fas fa-plus"></i>
+                </a>
+              </div>
+            </div>
+        </div>
+
+        <div>
+            <!-- Dropdown Trigger -->
+            <a class='dropdown-trigger waves-effect waves-light btn-floating' data-target='options-dropdown'>
+                <i class="fas fa-ellipsis-v"></i>
+            </a>
+            
+            <!-- Dropdown Structure -->
+            <ul id='options-dropdown' class='dropdown-content'>
+                <li>
+                    <a>
+                      Logout
+                    </a>
+                </li>
+                <li>
+                    <a>
+                      <i class="fas fa-sign-out-alt"></i>
+                      <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+</div>
+
+<div id="search-container">
+    <div class="input-field">
+        <input placeholder="Search For Contact or Chat" id="chat-and-contact-searchbox" type="text" class="validate">        
+    </div>
+    <button id="search-button" class="waves-effect waves-light btn-floating">
+            <i class="fas fa-search"></i>
+    </button>
+</div>
+
+<div id="contact-list-container">
+    
+    @foreach (var contact in CrossoManager.CurrentUser?.Contacts)
+    {
+        <div class="contact-card" @onclick="() => OnContactClick(contact.ContactID)">
+            <img src="assets/images/profile.jpg" alt="" class="circle responsive-img contact-photo" id="navbar-profile-photo">
+            <div class="contact-name-and-recent-message">
+                <span class="contact-name">@contact.Name</span>
+                <span class="recent-message-of">@contact.RecentChatBubble?.MessageBody</span>
+            </div>
+            <div class="recent-message-date-and-chat-options">
+                <span>@contact.RecentChatBubble?.MessageDate.ToShortTimeString()</span>
+            </div>
+        
+        </div>
+    }
+</div>
+
+@code {
+    public string TargetUserName { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            JSRuntime.InvokeVoidAsync("initMaterialDropdowns");
+            JSRuntime.InvokeVoidAsync("initMaterialModals");
+
+            CrossoManager.CheckForNewContacts();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        CrossoManager.ContactListChanged += () =>
+        {
+            InvokeAsync(StateHasChanged);
+        };
+    }
+
+    void OnContactClick(ObjectId targetContactID)
+    {
+        NavigationManager.NavigateTo($"/contact/{ targetContactID }/chat");
+    }
+
+    void AddContact()
+    {
+        CrossoManager.AddContactToUser(TargetUserName);
+    }
+
+}

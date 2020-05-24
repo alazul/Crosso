@@ -1,0 +1,27 @@
+﻿@inject CrossoManager CrossoMan
+
+<div id="contactbar-left-side">
+    <img src="assets/images/profile.jpg" alt="" class="circle responsive-img" id="navbar-profile-photo">
+    <span>@ContactName</span>
+</div>
+<div id="contactbar-right-side">
+
+</div>
+
+@code {
+    [Parameter]
+    public string ContactName { get; set; }
+
+    protected override void OnInitialized()
+    {
+    }
+
+    void OnContactClick()
+    {
+
+    }
+
+
+
+
+}
